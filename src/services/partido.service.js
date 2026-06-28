@@ -1,0 +1,84 @@
+const partidoModel = require("../models/partido.model");
+const seleccionModel = require("../models/seleccion.model");
+
+async function getAll() {
+
+    return await partidoModel.findAll();
+
+}
+
+async function getById(id) {
+
+    const partido = await partidoModel.findById(id);
+
+    if (!partido) {
+        throw new Error("Partido no encontrado.");
+    }
+
+    return partido;
+
+}
+
+async function getByFase(fase) {
+
+    return await partidoModel.findByFase(fase);
+
+}
+
+async function create(data) {
+
+    if (data.seleccion_local_id === data.seleccion_visitante_id) {
+        throw new Error("Una selección no puede jugar contra sí misma.");
+    }
+
+    const local = await seleccionModel.findById(
+        data.seleccion_local_id
+    );
+
+    if (!local) {
+        throw new Error("La selección local no existe.");
+    }
+
+    const visitante = await seleccionModel.findById(
+        data.seleccion_visitante_id
+    );
+
+    if (!visitante) {
+        throw new Error("La selección visitante no existe.");
+    }
+
+    return await partidoModel.create(data);
+
+}
+
+async function updateResultado(id, data) {
+
+    const partido = await partidoModel.findById(id);
+
+    if (!partido) {
+
+        throw new Error("Partido no encontrado.");
+
+    }
+
+    await partidoModel.updateResultado(
+
+        id,
+
+        data.goles_local,
+
+        data.goles_visitante
+
+    );
+
+    return await partidoModel.findById(id);
+
+}
+
+module.exports = {
+    getAll,
+    getById,
+    getByFase,
+    create,
+    updateResultado
+};
