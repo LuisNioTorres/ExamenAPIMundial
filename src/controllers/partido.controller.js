@@ -139,10 +139,61 @@ async function updateResultado(req, res) {
 
 }
 
+async function update(req, res) {
+
+    try {
+
+        const partido = await partidoService.update(
+            req.params.id,
+            req.body
+        );
+
+        return response.success(
+            res,
+            "Partido actualizado correctamente.",
+            partido
+        );
+
+    } catch (error) {
+
+        return response.error(
+            res,
+            error.message
+        );
+
+    }
+
+}
+
+async function remove(req, res) {
+
+    try {
+
+        await partidoService.remove(req.params.id);
+
+        return response.success(
+            res,
+            "Partido eliminado correctamente."
+        );
+
+    } catch (error) {
+
+        return response.error(
+            res,
+            error.message,
+            404
+        );
+
+    }
+
+}
+
 module.exports = {
     getAll,
     getById,
     getByFase,
     create,
-    updateResultado
+    update,
+    updateResultado,
+    remove
 };

@@ -5,6 +5,7 @@ const swaggerSpec = require("./config/swagger");
 const authRoutes = require("./routes/auth.routes");
 const seleccionRoutes = require("./routes/seleccion.routes");
 const partidoRoutes = require("./routes/partido.routes");
+const tablaRoutes=require("./routes/tabla.routes");
 
 const app = express();
 
@@ -30,5 +31,13 @@ app.use("/api/auth", authRoutes);
 app.use("/api/selecciones", seleccionRoutes);
 
 app.use("/api/partidos", partidoRoutes);
+
+app.use(
+
+"/api/grupos",
+
+tablaRoutes
+
+);
 
 module.exports = app;

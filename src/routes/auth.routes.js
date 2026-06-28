@@ -8,6 +8,13 @@ const authorizeRoles = require("../middlewares/role.middleware");
 
 /**
  * @swagger
+ * tags:
+ *   name: Autenticación
+ *   description: Gestión de usuarios
+ */
+
+/**
+ * @swagger
  * /api/auth/register:
  *   post:
  *     summary: Registrar un nuevo usuario
@@ -82,6 +89,7 @@ const authorizeRoles = require("../middlewares/role.middleware");
  *       401:
  *         description: Token inválido
  */
+
 
 router.post("/register", authController.register);
 router.post("/login", authController.login);

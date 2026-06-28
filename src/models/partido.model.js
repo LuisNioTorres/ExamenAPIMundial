@@ -158,10 +158,57 @@ async function updateResultado(id, golesLocal, golesVisitante) {
     );
 
 }
+
+async function update(id, data) {
+
+    await pool.query(
+        `
+        UPDATE partidos
+        SET
+            seleccion_local_id=?,
+            seleccion_visitante_id=?,
+            fecha=?,
+            estadio=?,
+            fase=?,
+            goles_local=?,
+            goles_visitante=?,
+            estado=?
+        WHERE id=?
+        `,
+        [
+            data.seleccion_local_id,
+            data.seleccion_visitante_id,
+            data.fecha,
+            data.estadio,
+            data.fase,
+            data.goles_local,
+            data.goles_visitante,
+            data.estado,
+            id
+        ]
+    );
+
+    return {
+        id,
+        ...data
+    };
+
+}
+
+async function remove(id) {
+
+    await pool.query(
+        "DELETE FROM partidos WHERE id=?",
+        [id]
+    );
+
+}
 module.exports = {
     findAll,
     findById,
     findByFase,
     create,
-    updateResultado
+    update,
+    updateResultado,
+    remove
 };

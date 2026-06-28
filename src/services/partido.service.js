@@ -75,10 +75,51 @@ async function updateResultado(id, data) {
 
 }
 
+async function update(id, data) {
+
+    const partido = await partidoModel.findById(id);
+
+    if (!partido) {
+        throw new Error("Partido no encontrado.");
+    }
+
+    if (data.seleccion_local_id === data.seleccion_visitante_id) {
+        throw new Error("Una selección no puede jugar contra sí misma.");
+    }
+
+    const local = await seleccionModel.findById(data.seleccion_local_id);
+
+    if (!local) {
+        throw new Error("La selección local no existe.");
+    }
+
+    const visitante = await seleccionModel.findById(data.seleccion_visitante_id);
+
+    if (!visitante) {
+        throw new Error("La selección visitante no existe.");
+    }
+
+    return await partidoModel.update(id, data);
+
+}
+
+async function remove(id) {
+
+    const partido = await partidoModel.findById(id);
+
+    if (!partido) {
+        throw new Error("Partido no encontrado.");
+    }
+
+    await partidoModel.remove(id);
+
+}
 module.exports = {
     getAll,
     getById,
     getByFase,
     create,
-    updateResultado
+    update,
+    updateResultado,
+    remove
 };

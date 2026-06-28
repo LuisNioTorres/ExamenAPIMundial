@@ -215,4 +215,106 @@ router.put(
     controller.updateResultado
 );
 
+/**
+ * @swagger
+ * /api/partidos/{id}:
+ *   put:
+ *     summary: Actualizar un partido
+ *     tags: [Partidos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del partido
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               seleccion_local_id:
+ *                 type: integer
+ *               seleccion_visitante_id:
+ *                 type: integer
+ *               fecha:
+ *                 type: string
+ *                 format: date-time
+ *               estadio:
+ *                 type: string
+ *               fase:
+ *                 type: string
+ *                 enum:
+ *                   - GRUPOS
+ *                   - OCTAVOS
+ *                   - CUARTOS
+ *                   - SEMIFINAL
+ *                   - FINAL
+ *               goles_local:
+ *                 type: integer
+ *               goles_visitante:
+ *                 type: integer
+ *               estado:
+ *                 type: string
+ *                 enum:
+ *                   - PROGRAMADO
+ *                   - EN_JUEGO
+ *                   - FINALIZADO
+ *     responses:
+ *       200:
+ *         description: Partido actualizado correctamente
+ *       400:
+ *         description: Datos inválidos
+ *       401:
+ *         description: No autenticado
+ *       403:
+ *         description: No tiene permisos para realizar esta acción
+ *       404:
+ *         description: Partido no encontrado
+ */
+router.put(
+    "/:id",
+    authenticateToken,
+    authorizeRoles("ADMIN"),
+    createPartidoValidation,
+    validate,
+    controller.update
+);
+
+/**
+ * @swagger
+ * /api/partidos/{id}:
+ *   delete:
+ *     summary: Eliminar un partido
+ *     tags: [Partidos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del partido
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Partido eliminado correctamente
+ *       401:
+ *         description: No autenticado
+ *       403:
+ *         description: No tiene permisos para realizar esta acción
+ *       404:
+ *         description: Partido no encontrado
+ */
+router.delete(
+    "/:id",
+    authenticateToken,
+    authorizeRoles("ADMIN"),
+    controller.remove
+);
+
 module.exports = router;
