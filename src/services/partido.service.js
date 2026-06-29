@@ -31,6 +31,18 @@ async function create(data) {
         throw new Error("Una selección no puede jugar contra sí misma.");
     }
 
+    if (
+    data.estado === "PROGRAMADO" &&
+    (
+        Number(data.goles_local) !== 0 ||
+        Number(data.goles_visitante) !== 0
+    )
+) {
+    throw new Error(
+        "Un partido PROGRAMADO debe iniciar con marcador 0 - 0."
+    );
+}
+
     const local = await seleccionModel.findById(
         data.seleccion_local_id
     );
@@ -98,6 +110,18 @@ async function update(id, data) {
     if (!visitante) {
         throw new Error("La selección visitante no existe.");
     }
+
+    if (
+    data.estado === "PROGRAMADO" &&
+    (
+        Number(data.goles_local) !== 0 ||
+        Number(data.goles_visitante) !== 0
+    )
+) {
+    throw new Error(
+        "Un partido PROGRAMADO debe iniciar con marcador 0 - 0."
+    );
+}
 
     return await partidoModel.update(id, data);
 
